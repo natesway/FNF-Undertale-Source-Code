@@ -36,6 +36,7 @@ jobs:
           haxelib install flixel-addons
           haxelib install hxCodec
           haxelib git linc_luajit https://github.com/MAJigsaw77/linc_luajit.git
+          haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib list
 
       - name: Create Version Tag
