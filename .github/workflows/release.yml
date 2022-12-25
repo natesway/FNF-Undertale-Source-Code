@@ -1,0 +1,34 @@
+name: VanillaOS release
+
+on:
+  workflow_run:
+    workflows: ["Linux Build"]
+    types:
+      - completed
+
+
+jobs:
+  create-release:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: make directory
+        run: mkdir -p /tmp/artifacts
+      - name: Downloading rootfs artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: /tmp/artifacts/
+
+      - name: Generating release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::$(date +"%Y.%m.%d_%H-%M")"
+          cd /tmp/artifacts/ 
+      - name: Creating new release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: Linux build - ${{ steps.tag.outputs.release_tag }}
+          body: Balls
+          files: |
+            /tmp/artifacts/LinuxBuild.zip
